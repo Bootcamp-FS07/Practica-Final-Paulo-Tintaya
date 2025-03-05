@@ -22,7 +22,6 @@ export class AuthService {
     const data: AuthResponse = await response.json();
     localStorage.setItem('token', data.access_token);
 
-    // Save user ID if provided; otherwise, fetch profile
     if (data.user && data.user._id) {
       localStorage.setItem('userId', data.user._id);
     } else {
@@ -32,7 +31,6 @@ export class AuthService {
     return data;
   }
 
-  // Added signup method
   async signup(username: string, email: string, password: string): Promise<AuthResponse> {
     const response = await fetch(`${this.apiUrl}/signup`, {
       method: 'POST',
@@ -46,7 +44,6 @@ export class AuthService {
     return data;
   }
 
-  // Optional: Fetch user profile to get user ID if not returned during login
   async fetchUserProfile(): Promise<void> {
     const token = this.getToken();
     if (!token) return;

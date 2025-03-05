@@ -1,12 +1,12 @@
 export interface Author {
   _id: string;
-  username: string; // Will be empty if not provided
+  username: string;
 }
 
 export interface Post {
   _id: string;
   text: string;
-  author: Author;  // Always an object
+  author: Author;
   createdAt: string;
   updatedAt?: string;
 }

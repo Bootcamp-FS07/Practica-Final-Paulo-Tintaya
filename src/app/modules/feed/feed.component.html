@@ -9,8 +9,7 @@
   <h2 class="text-2xl font-bold mb-4">Create a Post</h2>
   <textarea [(ngModel)]="newPostText"
     class="w-full p-2 border border-gray-300 rounded"
-    placeholder="Write something..."
-  ></textarea>
+    placeholder="Write something..."></textarea>
   <button (click)="addPost()"
     class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
     Post
@@ -22,9 +21,28 @@
   <div *ngIf="posts.length === 0" class="text-gray-500">No posts available</div>
 
   <div *ngFor="let post of posts" class="p-4 border border-gray-300 rounded-lg mb-4">
-    <h3 class="text-lg font-semibold">{{ post.text }}</h3>
-    <p class="text-sm text-gray-500">
-      Posted by {{ post.author.username || post.author._id }}
-    </p>
+    <div *ngIf="editingPostId !== post._id; else editMode">
+      <h3 class="text-lg font-semibold">{{ post.text }}</h3>
+      <p class="text-sm text-gray-500">
+        Posted by {{ post.author.username || post.author._id }}
+      </p>
+      <div *ngIf="getAuthorId(post) === currentUserId">
+        <button (click)="startEditing(post)" class="mr-2 bg-yellow-500 text-white px-2 py-1 rounded">
+          Edit
+        </button>
+        <button (click)="deletePost(post._id)" class="bg-red-500 text-white px-2 py-1 rounded">
+          Delete
+        </button>
+      </div>
+    </div>
+    <ng-template #editMode>
+      <input type="text" [(ngModel)]="editPostText" class="border border-gray-300 p-2 rounded"/>
+      <button (click)="saveEdit(post._id)" class="mr-2 bg-green-500 text-white px-2 py-1 rounded">
+        Save
+      </button>
+      <button (click)="cancelEditing()" class="bg-gray-500 text-white px-2 py-1 rounded">
+        Cancel
+      </button>
+    </ng-template>
   </div>
 </div>

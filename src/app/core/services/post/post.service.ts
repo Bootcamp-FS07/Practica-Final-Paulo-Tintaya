@@ -38,11 +38,19 @@ export class PostService {
     );
   }
 
-
   addPost(text: string): Observable<Post> {
-    const userId = localStorage.getItem('userId'); // Make sure userId is stored after login
+    const userId = localStorage.getItem('userId');
     const body = { text, author: userId };
     return this.http.post<Post>(this.postUrl, body, { headers: this.buildAuthHeaders() });
+  }
+
+  updatePost(postId: string, text: string): Observable<Post> {
+    const body = { text };
+    return this.http.patch<Post>(`${this.postUrl}/${postId}`, body, { headers: this.buildAuthHeaders() });
+  }
+
+  deletePost(postId: string): Observable<any> {
+    return this.http.delete(`${this.postUrl}/${postId}`, { headers: this.buildAuthHeaders() });
   }
 
   private buildAuthHeaders(): HttpHeaders {

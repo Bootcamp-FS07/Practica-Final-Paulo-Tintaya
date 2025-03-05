@@ -16,6 +16,8 @@ import { AuthService } from '../../core/services/auth/auth.service';
 export class FeedComponent implements OnInit {
   posts: Post[] = [];
   newPostText = '';
+  editingPostId: string | null = null;
+  editPostText: string = '';
 
   constructor(
     private postService: PostService,
@@ -37,12 +39,52 @@ export class FeedComponent implements OnInit {
   addPost(): void {
     if (!this.newPostText.trim()) return;
     this.postService.addPost(this.newPostText).subscribe({
-      next: (post) => {
+      next: () => {
         this.newPostText = '';
         this.loadPosts();
       },
       error: (err) => { console.error('Error adding post:', err); }
     });
+  }
+
+  getAuthorId(post: Post): string {
+    return post.author._id;
+  }
+
+  get currentUserId(): string | null {
+    return localStorage.getItem('userId');
+  }
+
+  startEditing(post: Post): void {
+    if (this.getAuthorId(post) === this.currentUserId) {
+      this.editingPostId = post._id;
+      this.editPostText = post.text;
+    }
+  }
+
+  cancelEditing(): void {
+    this.editingPostId = null;
+    this.editPostText = '';
+  }
+
+  saveEdit(postId: string): void {
+    if (!this.editPostText.trim()) return;
+    this.postService.updatePost(postId, this.editPostText).subscribe({
+      next: () => {
+        this.cancelEditing();
+        this.loadPosts();
+      },
+      error: (err) => { console.error('Error editing post:', err); }
+    });
+  }
+
+  deletePost(postId: string): void {
+    if (confirm("Are you sure you want to delete this post?")) {
+      this.postService.deletePost(postId).subscribe({
+        next: () => this.loadPosts(),
+        error: (err) => { console.error('Error deleting post:', err); }
+      });
+    }
   }
 
   logout(): void {

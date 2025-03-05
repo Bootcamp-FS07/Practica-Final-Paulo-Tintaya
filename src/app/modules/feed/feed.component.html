@@ -21,11 +21,13 @@
   <div *ngIf="posts.length === 0" class="text-gray-500">No posts available</div>
 
   <div *ngFor="let post of posts" class="p-4 border border-gray-300 rounded-lg mb-4">
+    <!-- Post display -->
     <div *ngIf="editingPostId !== post._id; else editMode">
       <h3 class="text-lg font-semibold">{{ post.text }}</h3>
       <p class="text-sm text-gray-500">
-        Posted by {{ post.author.username || post.author._id }}
+        Posted by {{ post.author?.username || post.author._id || post.author }}
       </p>
+      <!-- Edit/Delete buttons for post if current user is the author -->
       <div *ngIf="getAuthorId(post) === currentUserId">
         <button (click)="startEditing(post)" class="mr-2 bg-yellow-500 text-white px-2 py-1 rounded">
           Edit
@@ -37,12 +39,57 @@
     </div>
     <ng-template #editMode>
       <input type="text" [(ngModel)]="editPostText" class="border border-gray-300 p-2 rounded"/>
-      <button (click)="saveEdit(post._id)" class="mr-2 bg-green-500 text-white px-2 py-1 rounded">
+      <button (click)="updatePost(post._id)" class="mr-2 bg-green-500 text-white px-2 py-1 rounded">
         Save
       </button>
       <button (click)="cancelEditing()" class="bg-gray-500 text-white px-2 py-1 rounded">
         Cancel
       </button>
     </ng-template>
+
+    <!-- Comments Section for a post -->
+    <div class="mt-4 ml-4">
+      <h4 class="text-lg font-semibold">Comments</h4>
+      <div *ngIf="commentsMap[post._id]?.length === 0" class="text-gray-500">No comments yet.</div>
+      <div *ngFor="let comment of commentsMap[post._id]" class="border border-gray-200 p-2 rounded my-1">
+        <!-- Display mode -->
+        <div *ngIf="editingCommentId !== comment._id; else commentEditMode">
+          <p>{{ comment.text }}</p>
+          <p class="text-xs text-gray-500">
+            By: {{ comment.author.username || comment.author._id }}
+          </p>
+          <!-- Only show edit and delete if current user is the comment author -->
+          <div *ngIf="getCommentAuthorId(comment) === currentUserId">
+            <button (click)="startEditingComment(comment)" class="mr-2 bg-yellow-400 text-white px-2 py-1 rounded">
+              Edit
+            </button>
+            <button (click)="deleteComment(comment._id, post._id)" class="bg-red-400 text-white px-2 py-1 rounded">
+              Delete
+            </button>
+          </div>
+        </div>
+        <!-- Edit mode for comment -->
+        <ng-template #commentEditMode>
+          <input type="text" [(ngModel)]="editCommentText" class="border border-gray-300 p-2 rounded"/>
+          <button (click)="saveEditedComment(comment._id, post._id)" class="mr-2 bg-green-400 text-white px-2 py-1 rounded">
+            Save
+          </button>
+          <button (click)="cancelEditingComment()" class="bg-gray-400 text-white px-2 py-1 rounded">
+            Cancel
+          </button>
+        </ng-template>
+      </div>
+
+      <!-- Form to add a new comment -->
+      <div class="mt-2">
+        <input type="text" [(ngModel)]="newCommentText[post._id]" placeholder="Add a comment..."
+          class="w-full border border-gray-300 p-2 rounded"/>
+        <button (click)="addComment(post._id)" class="mt-1 bg-blue-400 text-white px-3 py-1 rounded">
+          Comment
+        </button>
+      </div>
+    </div>
+
+
   </div>
 </div>

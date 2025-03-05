@@ -4,7 +4,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Post } from '../../shared/models/post.model';
 import { PostService } from '../../core/services/post/post.service';
+import { CommentService } from '../../core/services/comment/comment.service';
 import { AuthService } from '../../core/services/auth/auth.service';
+import { Comment } from '../../shared/models/comment.model';
 
 @Component({
   selector: 'app-feed',
@@ -19,8 +21,14 @@ export class FeedComponent implements OnInit {
   editingPostId: string | null = null;
   editPostText: string = '';
 
+  commentsMap: { [postId: string]: Comment[] } = {};
+  newCommentText: { [postId: string]: string } = {};
+  editingCommentId: string | null = null;
+  editCommentText: string = '';
+
   constructor(
     private postService: PostService,
+    private commentService: CommentService,
     private authService: AuthService,
     private router: Router
   ) {}
@@ -31,7 +39,10 @@ export class FeedComponent implements OnInit {
 
   loadPosts(): void {
     this.postService.getPosts().subscribe({
-      next: (posts) => { this.posts = posts; },
+      next: (posts) => {
+        this.posts = posts;
+        posts.forEach(post => this.loadComments(post._id));
+      },
       error: (err) => { console.error('Error fetching posts:', err); }
     });
   }
@@ -47,27 +58,7 @@ export class FeedComponent implements OnInit {
     });
   }
 
-  getAuthorId(post: Post): string {
-    return post.author._id;
-  }
-
-  get currentUserId(): string | null {
-    return localStorage.getItem('userId');
-  }
-
-  startEditing(post: Post): void {
-    if (this.getAuthorId(post) === this.currentUserId) {
-      this.editingPostId = post._id;
-      this.editPostText = post.text;
-    }
-  }
-
-  cancelEditing(): void {
-    this.editingPostId = null;
-    this.editPostText = '';
-  }
-
-  saveEdit(postId: string): void {
+  updatePost(postId: string): void {
     if (!this.editPostText.trim()) return;
     this.postService.updatePost(postId, this.editPostText).subscribe({
       next: () => {
@@ -85,6 +76,82 @@ export class FeedComponent implements OnInit {
         error: (err) => { console.error('Error deleting post:', err); }
       });
     }
+  }
+
+  loadComments(postId: string): void {
+    this.commentService.getComments(postId).subscribe({
+      next: (comments) => { this.commentsMap[postId] = comments; },
+      error: (err) => { console.error(`Error fetching comments for post ${postId}:`, err); }
+    });
+  }
+
+  addComment(postId: string): void {
+    const text = this.newCommentText[postId];
+    if (!text || !text.trim()) return;
+    this.commentService.addComment(text, postId).subscribe({
+      next: () => {
+        this.newCommentText[postId] = '';
+        this.loadComments(postId);
+      },
+      error: (err) => { console.error(`Error adding comment to post ${postId}:`, err); }
+    });
+  }
+
+  startEditingComment(comment: Comment): void {
+    const currentUserId = this.currentUserId;
+    if (comment.author._id === currentUserId) {
+      this.editingCommentId = comment._id;
+      this.editCommentText = comment.text;
+    }
+  }
+
+  cancelEditingComment(): void {
+    this.editingCommentId = null;
+    this.editCommentText = '';
+  }
+
+  saveEditedComment(commentId: string, postId: string): void {
+    if (!this.editCommentText.trim()) return;
+    this.commentService.updateComment(commentId, this.editCommentText, postId).subscribe({
+      next: () => {
+        this.cancelEditingComment();
+        this.loadComments(postId);
+      },
+      error: (err) => { console.error('Error editing comment:', err); }
+    });
+  }
+
+  deleteComment(commentId: string, postId: string): void {
+    if (confirm("Are you sure you want to delete this comment?")) {
+      this.commentService.deleteComment(commentId).subscribe({
+        next: () => this.loadComments(postId),
+        error: (err) => { console.error('Error deleting comment:', err); }
+      });
+    }
+  }
+
+  getCommentAuthorId(comment: Comment): string {
+    return comment.author._id;
+  }
+
+  getAuthorId(post: Post): string {
+    return typeof post.author === 'string' ? post.author : post.author._id;
+  }
+
+  get currentUserId(): string | null {
+    return localStorage.getItem('userId');
+  }
+
+  startEditing(post: Post): void {
+    if (this.getAuthorId(post) === this.currentUserId) {
+      this.editingPostId = post._id;
+      this.editPostText = post.text;
+    }
+  }
+
+  cancelEditing(): void {
+    this.editingPostId = null;
+    this.editPostText = '';
   }
 
   logout(): void {

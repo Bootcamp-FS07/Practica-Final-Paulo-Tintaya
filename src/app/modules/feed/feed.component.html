@@ -6,13 +6,25 @@
 </div>
 
 <div class="p-4">
-  <h2 class="text-2xl font-bold mb-4">Posts</h2>
+  <h2 class="text-2xl font-bold mb-4">Create a Post</h2>
+  <textarea [(ngModel)]="newPostText"
+    class="w-full p-2 border border-gray-300 rounded"
+    placeholder="Write something..."
+  ></textarea>
+  <button (click)="addPost()"
+    class="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+    Post
+  </button>
+</div>
 
+<div class="p-4">
+  <h2 class="text-2xl font-bold mb-4">Posts</h2>
   <div *ngIf="posts.length === 0" class="text-gray-500">No posts available</div>
 
   <div *ngFor="let post of posts" class="p-4 border border-gray-300 rounded-lg mb-4">
-    <h3 class="text-lg font-semibold">{{ post.title }}</h3>
-    <p class="text-gray-700">{{ post.content }}</p>
-    <p class="text-sm text-gray-500">Posted by {{ post.author }} on {{ post.date }}</p>
+    <h3 class="text-lg font-semibold">{{ post.text }}</h3>
+    <p class="text-sm text-gray-500">
+      Posted by {{ post.author.username || post.author._id }}
+    </p>
   </div>
 </div>

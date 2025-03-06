@@ -4,25 +4,61 @@
     <form (ngSubmit)="signup()">
       <mat-form-field class="auth-form-field">
         <mat-label>Username</mat-label>
-        <input matInput type="text" [(ngModel)]="username" name="username" required>
+        <input
+          matInput
+          type="text"
+          [(ngModel)]="username"
+          name="username"
+          required
+          #usernameInput="ngModel"
+        />
+        <mat-error *ngIf="usernameInput.invalid && (usernameInput.dirty || usernameInput.touched)">
+          Username is required
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field class="auth-form-field">
         <mat-label>Email</mat-label>
-        <input matInput type="email" [(ngModel)]="email" name="email" required>
+        <input
+          matInput
+          type="email"
+          [(ngModel)]="email"
+          name="email"
+          required
+          email
+          #emailInput="ngModel"
+        />
+        <mat-error *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)">
+          Please enter a valid email
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field class="auth-form-field">
         <mat-label>Password</mat-label>
-        <input matInput type="password" [(ngModel)]="password" name="password" required>
+        <input
+          matInput
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          required
+          minlength="6"
+          #passwordInput="ngModel"
+        />
+        <mat-error *ngIf="passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)">
+          Password is required and must be at least 6 characters
+        </mat-error>
       </mat-form-field>
 
-      <button mat-raised-button color="primary" class="auth-button">Sign Up</button>
+      <button mat-raised-button color="primary" class="auth-button">
+        Sign Up
+      </button>
     </form>
+
     <p class="auth-switch">
       Already have an account?
       <a routerLink="/auth/login">Login</a>
     </p>
+
     <p class="auth-error" *ngIf="errorMessage">{{ errorMessage }}</p>
   </div>
 </div>

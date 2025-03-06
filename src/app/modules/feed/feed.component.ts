@@ -9,6 +9,7 @@ import { AuthService } from '../../core/services/auth/auth.service';
 import { Comment } from '../../shared/models/comment.model';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { TimeAgoPipe } from '../../shared/pipes/time-ago.pipe';
 
 @Component({
   selector: 'app-feed',
@@ -18,12 +19,15 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     FormsModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
+    TimeAgoPipe
   ],
   templateUrl: './feed.component.html',
   styleUrls: ['./feed.component.css'],
 })
 export class FeedComponent implements OnInit {
   posts: Post[] = [];
+  currentPage = 1;
+  postsPerPage = 5;
   newPostText = '';
   editingPostId: string | null = null;
   editPostText: string = '';
@@ -202,5 +206,27 @@ export class FeedComponent implements OnInit {
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/auth/login']);
+  }
+
+  get currentUser() {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+  }
+
+  get paginatedPosts(): Post[] {
+    const start = (this.currentPage - 1) * this.postsPerPage;
+    return this.posts.slice(start, start + this.postsPerPage);
+  }
+
+  nextPage(): void {
+    if (this.currentPage * this.postsPerPage < this.posts.length) {
+      this.currentPage++;
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
   }
 }

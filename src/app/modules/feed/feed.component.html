@@ -1,6 +1,8 @@
 <div class="feed-container">
   <header class="feed-header">
-    <h1 class="feed-title">Feed</h1>
+    <div class="welcome-message">
+      Welcome, {{ currentUser?.username || 'User' }}!
+    </div>
     <button (click)="logout()" class="feed-logout-button">Logout</button>
   </header>
 
@@ -21,11 +23,12 @@
       No posts available
     </div>
 
-    <div *ngFor="let post of posts" class="post-card">
+    <div *ngFor="let post of paginatedPosts" class="post-card">
       <div *ngIf="editingPostId !== post._id; else editMode">
         <h3 class="post-text">{{ post.text }}</h3>
         <p class="post-meta">
-          Posted by {{ post.author.username || post.author._id }}
+          By {{ post.author.username || post.author._id }}
+          {{ post.createdAt | timeAgo }}
         </p>
         <div *ngIf="getAuthorId(post) === currentUserId">
           <button (click)="startEditing(post)" class="edit-button">Edit</button>
@@ -72,6 +75,11 @@
           <button (click)="addComment(post._id)" class="comment-button">Comment</button>
         </div>
       </div>
+    </div>
+    <div class="pagination-controls">
+      <button (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
+      <span>Page {{ currentPage }}</span>
+      <button (click)="nextPage()" [disabled]="currentPage * postsPerPage >= posts.length">Next</button>
     </div>
   </section>
 </div>

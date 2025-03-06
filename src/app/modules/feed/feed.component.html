@@ -75,9 +75,9 @@
       </div>
     </div>
     <div class="pagination-controls">
-      <button (click)="prevPage()" [disabled]="currentPage === 1">Previous</button>
-      <span>Page {{ currentPage }}</span>
-      <button (click)="nextPage()" [disabled]="currentPage * postsPerPage >= posts.length">Next</button>
+      <button (click)="prevPage()" [disabled]="currentPage === 1" class="pagination-button">Previous</button>
+      <span class="pagination-info">Page {{ currentPage }}</span>
+      <button (click)="nextPage()" [disabled]="currentPage * postsPerPage >= posts.length" class="pagination-button">Next</button>
     </div>
   </section>
 </div>

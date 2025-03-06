@@ -24,6 +24,7 @@ export class AuthService {
 
     if (data.user && data.user._id) {
       localStorage.setItem('userId', data.user._id);
+      localStorage.setItem('user', JSON.stringify(data.user));
     } else {
       await this.fetchUserProfile();
     }

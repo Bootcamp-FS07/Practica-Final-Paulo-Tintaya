@@ -10,9 +10,16 @@ import { AuthService } from '../../../core/services/auth/auth.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, RouterModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    RouterModule,
+  ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
 })
 export class LoginComponent {
   username = '';
@@ -24,7 +31,7 @@ export class LoginComponent {
   async login() {
     try {
       await this.authService.login(this.username, this.password);
-      console.log('siuu')
+      console.log('siuu');
       this.router.navigate(['/feed']);
     } catch (error) {
       this.errorMessage = 'Invalid username or password';

@@ -3,7 +3,7 @@ import { environment } from '../../../../environments/environment';
 import { AuthResponse } from '../../../shared/models/auth-response.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private apiUrl = environment.apiUrl + '/auth';
@@ -12,7 +12,7 @@ export class AuthService {
     const response = await fetch(`${this.apiUrl}/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify({ username, password }),
     });
 
     if (!response.ok) {
@@ -31,11 +31,15 @@ export class AuthService {
     return data;
   }
 
-  async signup(username: string, email: string, password: string): Promise<AuthResponse> {
+  async signup(
+    username: string,
+    email: string,
+    password: string
+  ): Promise<AuthResponse> {
     const response = await fetch(`${this.apiUrl}/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, email, password })
+      body: JSON.stringify({ username, email, password }),
     });
     if (!response.ok) {
       throw new Error('Signup failed');
@@ -48,7 +52,7 @@ export class AuthService {
     const token = this.getToken();
     if (!token) return;
     const response = await fetch(`${environment.apiUrl}/user/profile`, {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     });
     if (!response.ok) {
       throw new Error('Failed to fetch user profile');

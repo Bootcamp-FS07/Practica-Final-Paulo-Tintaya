@@ -1,31 +1,28 @@
-<div class="flex justify-center items-center min-h-screen bg-gray-100">
-  <div class="w-full max-w-md bg-white p-8 shadow-lg rounded-lg">
-    <h2 class="text-2xl font-semibold text-center mb-6">Sign Up</h2>
-
+<div class="auth-container">
+  <div class="auth-box">
+    <h2 class="auth-title">Sign Up</h2>
     <form (ngSubmit)="signup()">
-      <mat-form-field class="w-full">
+      <mat-form-field class="auth-form-field">
         <mat-label>Username</mat-label>
         <input matInput type="text" [(ngModel)]="username" name="username" required>
       </mat-form-field>
 
-      <mat-form-field class="w-full">
+      <mat-form-field class="auth-form-field">
         <mat-label>Email</mat-label>
         <input matInput type="email" [(ngModel)]="email" name="email" required>
       </mat-form-field>
 
-      <mat-form-field class="w-full">
+      <mat-form-field class="auth-form-field">
         <mat-label>Password</mat-label>
         <input matInput type="password" [(ngModel)]="password" name="password" required>
       </mat-form-field>
 
-      <button mat-raised-button color="primary" class="w-full mt-4">Sign Up</button>
+      <button mat-raised-button color="primary" class="auth-button">Sign Up</button>
     </form>
-
-    <p class="text-center mt-4">
+    <p class="auth-switch">
       Already have an account?
-      <a routerLink="/auth/login" class="text-blue-500 hover:underline">Login</a>
+      <a routerLink="/auth/login">Login</a>
     </p>
-
-    <p class="text-red-500 mt-2" *ngIf="errorMessage">{{ errorMessage }}</p>
+    <p class="auth-error" *ngIf="errorMessage">{{ errorMessage }}</p>
   </div>
 </div>

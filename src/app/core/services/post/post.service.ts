@@ -6,51 +6,60 @@ import { Post, Author } from '../../../shared/models/post.model';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PostService {
   private postUrl = environment.apiUrl + '/post';
 
-  constructor(
-    private http: HttpClient,
-    private authService: AuthService
-  ) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   getPosts(): Observable<Post[]> {
-    return this.http.get<Post[]>(this.postUrl, { headers: this.buildAuthHeaders() }).pipe(
-      map(posts =>
-        posts
-          .map(post => ({
-            ...post,
-            author: post.author
-              ? (typeof post.author === 'object' && '$oid' in post.author
-                  ? { _id: (post.author as { $oid: string }).$oid, username: '' }
+    return this.http
+      .get<Post[]>(this.postUrl, { headers: this.buildAuthHeaders() })
+      .pipe(
+        map((posts) =>
+          posts
+            .map((post) => ({
+              ...post,
+              author: post.author
+                ? typeof post.author === 'object' && '$oid' in post.author
+                  ? {
+                      _id: (post.author as { $oid: string }).$oid,
+                      username: '',
+                    }
                   : typeof post.author === 'string'
-                    ? { _id: post.author, username: '' }
-                    : post.author)
-              : { _id: 'unknown', username: 'unknown' }
-          }))
-          .sort(
-            (a, b) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          )
-      )
-    );
+                  ? { _id: post.author, username: '' }
+                  : post.author
+                : { _id: 'unknown', username: 'unknown' },
+            }))
+            .sort(
+              (a, b) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
+            )
+        )
+      );
   }
 
   addPost(text: string): Observable<Post> {
     const userId = localStorage.getItem('userId');
     const body = { text, author: userId };
-    return this.http.post<Post>(this.postUrl, body, { headers: this.buildAuthHeaders() });
+    return this.http.post<Post>(this.postUrl, body, {
+      headers: this.buildAuthHeaders(),
+    });
   }
 
   updatePost(postId: string, text: string): Observable<Post> {
     const body = { text };
-    return this.http.patch<Post>(`${this.postUrl}/${postId}`, body, { headers: this.buildAuthHeaders() });
+    return this.http.patch<Post>(`${this.postUrl}/${postId}`, body, {
+      headers: this.buildAuthHeaders(),
+    });
   }
 
   deletePost(postId: string): Observable<any> {
-    return this.http.delete(`${this.postUrl}/${postId}`, { headers: this.buildAuthHeaders() });
+    return this.http.delete(`${this.postUrl}/${postId}`, {
+      headers: this.buildAuthHeaders(),
+    });
   }
 
   private buildAuthHeaders(): HttpHeaders {

@@ -9,7 +9,7 @@ export interface UserProfile {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
   private userUrl = environment.apiUrl + '/user';

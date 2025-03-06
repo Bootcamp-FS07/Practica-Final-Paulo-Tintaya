@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
   constructor(private router: Router) {}
@@ -11,7 +11,7 @@ export class AuthGuard implements CanActivate {
     const token = localStorage.getItem('token');
 
     if (!token) {
-      console.log("not authorized yet ;D")
+      console.log('not authorized yet ;D');
       this.router.navigate(['/auth/login']);
       return false;
     }

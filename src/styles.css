@@ -1,4 +1,38 @@
-/* You can add global styles to this file, and also import other style files */
+@import './app/shared/styles/shared-styles.scss';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+:root {
+  --primary-color: #5e35b1;      /* Deep purple */
+  --primary-light: #8e24aa;      /* Lighter purple */
+  --primary-dark: #311b92;       /* Dark purple */
+  --accent-color: #ff5722;       /* Vivid orange */
+  --background-color: #ffffff;   /* Clean white background */
+  --text-color: #212121;         /* Dark text */
+  --border-color: #e0e0e0;       /* Light gray borders */
+}
+
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}

@@ -1,28 +1,23 @@
-<div class="flex justify-center items-center min-h-screen bg-gray-100">
-  <div class="w-full max-w-md bg-white p-8 shadow-lg rounded-lg">
-    <h2 class="text-2xl font-semibold text-center mb-6">Login</h2>
-
+<div class="auth-container">
+  <div class="auth-box">
+    <h2 class="auth-title">Login  to start posting</h2>
     <form (ngSubmit)="login()">
-      <mat-form-field class="w-full">
+      <mat-form-field class="auth-form-field">
         <mat-label>Username</mat-label>
         <input matInput type="text" [(ngModel)]="username" name="username" required>
       </mat-form-field>
 
-      <mat-form-field class="w-full">
+      <mat-form-field class="auth-form-field">
         <mat-label>Password</mat-label>
         <input matInput type="password" [(ngModel)]="password" name="password" required>
       </mat-form-field>
 
-      <button mat-raised-button color="primary" class="w-full mt-4">Login</button>
+      <button mat-raised-button class="auth-button">Login</button>
     </form>
-    <p class="text-red-500 mt-2" *ngIf="errorMessage">{{ errorMessage }}</p>
-
-    <p class="text-center mt-4">
+    <p class="auth-error" *ngIf="errorMessage">{{ errorMessage }}</p>
+    <p class="auth-switch">
       Don't have an account?
-      <a routerLink="/auth/signup" class="text-blue-500 hover:underline">Sign up</a>
+      <a routerLink="/auth/signup">Sign up</a>
     </p>
   </div>
 </div>
-
-
-holaa

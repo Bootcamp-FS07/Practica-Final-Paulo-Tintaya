@@ -6,7 +6,7 @@ import { environment } from '../../../../environments/environment';
 import { Comment } from '../../../shared/models/comment.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CommentService {
   private apiUrl = environment.apiUrl;
@@ -17,21 +17,32 @@ export class CommentService {
   getComments(postId: string): Observable<Comment[]> {
     const params = new HttpParams().set('postId', postId);
     const url = `${this.apiUrl}/${this.endpoint}`;
-    return this.http.get<Comment[]>(url, { params, headers: this.buildAuthHeaders() });
+    return this.http.get<Comment[]>(url, {
+      params,
+      headers: this.buildAuthHeaders(),
+    });
   }
 
   addComment(text: string, postId: string): Observable<Comment> {
     const userId = localStorage.getItem('userId');
     const body = { text, author: userId, post: postId };
     const url = `${this.apiUrl}/${this.endpoint}`;
-    return this.http.post<Comment>(url, body, { headers: this.buildAuthHeaders() });
+    return this.http.post<Comment>(url, body, {
+      headers: this.buildAuthHeaders(),
+    });
   }
 
-  updateComment(commentId: string, text: string, postId: string): Observable<Comment> {
+  updateComment(
+    commentId: string,
+    text: string,
+    postId: string
+  ): Observable<Comment> {
     const userId = localStorage.getItem('userId');
     const body = { text, author: userId, post: postId };
     const url = `${this.apiUrl}/${this.endpoint}/${commentId}`;
-    return this.http.patch<Comment>(url, body, { headers: this.buildAuthHeaders() });
+    return this.http.patch<Comment>(url, body, {
+      headers: this.buildAuthHeaders(),
+    });
   }
 
   deleteComment(commentId: string): Observable<any> {

@@ -10,9 +10,17 @@ import { AuthService } from '../../../core/services/auth/auth.service';
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [CommonModule, NgIf, FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, RouterModule],
+  imports: [
+    CommonModule,
+    NgIf,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    RouterModule,
+  ],
   templateUrl: './signup.component.html',
-  styleUrl: './signup.component.css'
+  styleUrl: './signup.component.css',
 })
 export class SignupComponent {
   username = '';

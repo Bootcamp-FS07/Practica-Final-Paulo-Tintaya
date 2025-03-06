@@ -1,1 +1,48 @@
-/* You can add global styles to this file, and also import other style files */
+@import './app/shared/styles/shared-styles.scss';
+
+:root {
+  --primary-color: #f48024;      /* Stack Overflow orange */
+  --primary-light: #f7a46c;      /* Lighter orange for hover */
+  --primary-dark: #c25e14;       /* Darker orange for emphasis */
+  --accent-color: #232629;       /* Dark text for accents */
+  --background-color: #ffffff;   /* Clean white background */
+  --text-color: #333333;
+  --border-color: #e0e0e0;
+  --header-bg: #ffffff;          /* White header */
+  --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-mono: 'Consolas', 'Courier New', monospace;
+}
+
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+code, pre {
+  font-family: var(--font-mono);
+  background-color: #f4f4f4;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+}

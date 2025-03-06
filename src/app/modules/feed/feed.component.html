@@ -1,0 +1,83 @@
+<div class="feed-container">
+  <header class="feed-header">
+    <div class="welcome-message">
+      Welcome, {{ currentUser?.username || 'User' }}!
+    </div>
+  </header>
+
+  <section class="create-post">
+    <h2>Create a Post</h2>
+    <textarea [(ngModel)]="newPostText" class="post-textarea" placeholder="Write something..."></textarea>
+    <button (click)="addPost()" class="post-button">Post</button>
+  </section>
+
+  <section class="posts-section">
+
+    <div *ngIf="loading" class="spinner-container">
+      <mat-progress-spinner diameter="50" mode="indeterminate"></mat-progress-spinner>
+    </div>
+
+    <div *ngIf="!loading && posts.length === 0" class="no-posts-message">
+      No posts available
+    </div>
+
+    <div *ngFor="let post of paginatedPosts" class="post-card">
+      <div *ngIf="editingPostId !== post._id; else editMode">
+        <h3 class="post-text">{{ post.text }}</h3>
+        <p class="post-meta">
+          By {{ post.author.username || post.author._id }}
+          {{ post.createdAt | timeAgo }}
+        </p>
+        <div *ngIf="getAuthorId(post) === currentUserId">
+          <button (click)="startEditing(post)" class="edit-button">Edit</button>
+          <button (click)="deletePost(post._id)" class="delete-button">Delete</button>
+        </div>
+      </div>
+      <ng-template #editMode>
+        <input type="text" [(ngModel)]="editPostText" class="edit-input" />
+        <button (click)="updatePost(post._id)" class="save-button">Save</button>
+        <button (click)="cancelEditing()" class="cancel-button">Cancel</button>
+      </ng-template>
+
+      <div class="comments-section">
+        <h4>Comments</h4>
+        <div *ngIf="commentsMap[post._id]?.length === 0" class="no-comments-message">
+          No comments yet.
+        </div>
+        <div *ngFor="let comment of commentsMap[post._id]" class="comment-card">
+          <div *ngIf="editingCommentId !== comment._id; else commentEditMode">
+            <p class="comment-text">{{ comment.text }}</p>
+            <p class="comment-meta">
+              By: {{ comment.author.username || comment.author._id }}
+            </p>
+            <div *ngIf="getCommentAuthorId(comment) === currentUserId">
+              <button (click)="startEditingComment(comment)" class="edit-comment-button">Edit</button>
+              <button (click)="deleteComment(comment._id, post._id)" class="delete-comment-button">
+                Delete
+              </button>
+            </div>
+          </div>
+          <ng-template #commentEditMode>
+            <input type="text" [(ngModel)]="editCommentText" class="edit-comment-input" />
+            <button (click)="saveEditedComment(comment._id, post._id)" class="save-comment-button">
+              Save
+            </button>
+            <button (click)="cancelEditingComment()" class="cancel-comment-button">
+              Cancel
+            </button>
+          </ng-template>
+        </div>
+
+        <div class="add-comment">
+          <input type="text" [(ngModel)]="newCommentText[post._id]" placeholder="Add a comment..." class="comment-input" />
+          <button (click)="addComment(post._id)" class="comment-button">Comment</button>
+        </div>
+      </div>
+    </div>
+    <div class="pagination-controls">
+      <button (click)="prevPage()" [disabled]="currentPage === 1" class="pagination-button">Previous</button>
+      <span class="pagination-info">Page {{ currentPage }}</span>
+      <button (click)="nextPage()" [disabled]="currentPage * postsPerPage >= posts.length" class="pagination-button">Next</button>
+    </div>
+  </section>
+</div>

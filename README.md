@@ -75,7 +75,7 @@ src/
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/Bootcamp-FS07/Practica-Final-[YourName].git
+   git clone https://github.com/Bootcamp-FS07/Practica-Final-Paulo-Tintaya
    cd Practica-Final-[YourName]
    ```
 

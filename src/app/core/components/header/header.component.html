@@ -1,8 +1,17 @@
 <header class="header">
-  <div class="container header-container">
-    <div class="logo">The new Reddit</div>
-    <nav>
-      <button (click)="logout()" class="logout-button">Logout</button>
+  <div class="header-container">
+    <div class="logo">
+      <a routerLink="/">StackClone</a>
+    </div>
+    <nav class="nav" *ngIf="showFullHeader">
+      <a routerLink="/questions">Questions</a>
+      <a routerLink="/tags">Tags</a>
+      <a routerLink="/users">Users</a>
+      <a routerLink="/jobs">Jobs</a>
     </nav>
+    <div class="header-actions" *ngIf="showFullHeader">
+      <input type="text" placeholder="Search..." class="search-input" />
+      <button (click)="logout()" class="logout-button">Logout</button>
+    </div>
   </div>
 </header>

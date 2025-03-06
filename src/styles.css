@@ -1,20 +1,23 @@
 @import './app/shared/styles/shared-styles.scss';
 
 :root {
-  --primary-color: #5e35b1;      /* Deep purple */
-  --primary-light: #8e24aa;      /* Lighter purple */
-  --primary-dark: #311b92;       /* Dark purple */
-  --accent-color: #ff5722;       /* Vivid orange */
+  --primary-color: #f48024;      /* Stack Overflow orange */
+  --primary-light: #f7a46c;      /* Lighter orange for hover */
+  --primary-dark: #c25e14;       /* Darker orange for emphasis */
+  --accent-color: #232629;       /* Dark text for accents */
   --background-color: #ffffff;   /* Clean white background */
-  --text-color: #212121;         /* Dark text */
-  --border-color: #e0e0e0;       /* Light gray borders */
+  --text-color: #333333;
+  --border-color: #e0e0e0;
+  --header-bg: #ffffff;          /* White header */
+  --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-mono: 'Consolas', 'Courier New', monospace;
 }
 
 
 html, body {
   height: 100%;
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: var(--font-sans);
   background-color: var(--background-color);
   color: var(--text-color);
 }
@@ -35,4 +38,11 @@ a {
 }
 a:hover {
   text-decoration: underline;
+}
+
+code, pre {
+  font-family: var(--font-mono);
+  background-color: #f4f4f4;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
 }
